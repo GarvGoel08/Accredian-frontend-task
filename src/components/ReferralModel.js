@@ -15,6 +15,67 @@ export default function ReferralModel({ setModalOpen }) {
     phone: "",
   });
 
+  const handleSubmit = async () => {
+    const { friendName, friendEmail, friendPhone, friendCourse } =
+      friendDetails;
+    const { userName, userEmail, userPhone } = yourDetails;
+    if (
+      !friendName ||
+      !friendEmail ||
+      !friendPhone ||
+      !friendCourse ||
+      !userName ||
+      !userEmail ||
+      !userPhone
+    ) {
+      alert("Please fill in all the fields.");
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegexWithCountryCode = /^\+?\d{10,15}$/;
+    if (
+      !emailRegex.test(userEmail) ||
+      !emailRegex.test(friendEmail) ||
+      !phoneRegexWithCountryCode.test(friendPhone) ||
+      !phoneRegexWithCountryCode.test(userPhone)
+    ) {
+      alert("Please enter a valid email and phone number.");
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        "https://accredian-backend-task-yahv.onrender.com/api/referrals",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            friendName,
+            friendEmail,
+            friendPhone,
+            friendCourse,
+            userName,
+            userEmail,
+            userPhone,
+          }),
+        }
+      );
+      const data = await res.json();
+      if (res.ok) {
+        alert("Referral submitted successfully!");
+        setModalOpen(false);
+      }
+      else{
+        console.log(data);
+        alert("Something went wrong. Please try again later.");
+      }
+    } catch (error) {
+      console.log(error);
+      alert("Something went wrong. Please try again later.");
+    }
+  };
   const handleNext = () => {
     if (
       !friendDetails.name ||
@@ -23,6 +84,15 @@ export default function ReferralModel({ setModalOpen }) {
       !friendDetails.course
     ) {
       alert("Please fill in all the fields.");
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegexWithCountryCode = /^\+?\d{10,15}$/;
+    if (
+      !emailRegex.test(friendDetails.email) ||
+      !phoneRegexWithCountryCode.test(friendDetails.phone)
+    ) {
+      alert("Please enter a valid email and phone number.");
       return;
     }
     setPage(2);
@@ -42,7 +112,9 @@ export default function ReferralModel({ setModalOpen }) {
         </div>
         <div className="p-6">
           <div className="flex flex-row mb-3 w-full justify-between items-center">
-            <p className="text-[24px] md:text-[28px] font-semibold">Refer a <p className="inline text-theme">friend!</p></p>
+            <p className="text-[24px] md:text-[28px] font-semibold">
+              Refer a <p className="inline text-theme">friend!</p>
+            </p>
             <button onClick={() => setModalOpen(false)}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
