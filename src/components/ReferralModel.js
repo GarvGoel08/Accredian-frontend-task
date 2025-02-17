@@ -3,6 +3,7 @@ import ReferModal from "../images/ReferModal.png";
 
 export default function ReferralModel({ setModalOpen }) {
   const [page, setPage] = useState(1);
+  const [submitLoading, setSubmitLoading] = useState(false);
   const [friendDetails, setFriendDetails] = useState({
     name: "",
     email: "",
@@ -43,6 +44,7 @@ export default function ReferralModel({ setModalOpen }) {
       return;
     }
 
+    setSubmitLoading(true);
     try {
       const res = await fetch(
         "https://accredian-backend-task-yahv.onrender.com/api/referrals",
@@ -75,6 +77,7 @@ export default function ReferralModel({ setModalOpen }) {
       console.log(error);
       alert("Something went wrong. Please try again later.");
     }
+    setSubmitLoading(false);
   };
   const handleNext = () => {
     if (
@@ -218,8 +221,12 @@ export default function ReferralModel({ setModalOpen }) {
                 >
                   Back
                 </button>
-                <button className="bg-green-500 text-white py-2 px-4 rounded">
-                  Submit
+                <button
+                  disabled={submitLoading}
+                  onClick={handleSubmit}
+                  className="bg-green-500 text-white py-2 px-4 rounded"
+                >
+                  {submitLoading ? "Submitting..." : "Submit"}
                 </button>
               </div>
             </div>
