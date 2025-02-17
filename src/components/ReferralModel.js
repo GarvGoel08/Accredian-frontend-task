@@ -17,34 +17,29 @@ export default function ReferralModel({ setModalOpen }) {
   });
 
   const handleSubmit = async () => {
-    const { friendName, friendEmail, friendPhone, friendCourse } =
-      friendDetails;
-    const { userName, userEmail, userPhone } = yourDetails;
-    if (
-      !friendName ||
-      !friendEmail ||
-      !friendPhone ||
-      !friendCourse ||
-      !userName ||
-      !userEmail ||
-      !userPhone
-    ) {
+    const { name, email, phone, course } = friendDetails;
+    const { name: userName, email: userEmail, phone: userPhone } = yourDetails;
+  
+    if (!name || !email || !phone || !course || !userName || !userEmail || !userPhone) {
       alert("Please fill in all the fields.");
       return;
     }
+  
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneRegexWithCountryCode = /^\+?\d{10,15}$/;
+    
     if (
       !emailRegex.test(userEmail) ||
-      !emailRegex.test(friendEmail) ||
-      !phoneRegexWithCountryCode.test(friendPhone) ||
+      !emailRegex.test(email) ||
+      !phoneRegexWithCountryCode.test(phone) ||
       !phoneRegexWithCountryCode.test(userPhone)
     ) {
       alert("Please enter a valid email and phone number.");
       return;
     }
-
+  
     setSubmitLoading(true);
+  
     try {
       const res = await fetch(
         "https://accredian-backend-task-yahv.onrender.com/api/referrals",
@@ -54,10 +49,10 @@ export default function ReferralModel({ setModalOpen }) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            friendName,
-            friendEmail,
-            friendPhone,
-            friendCourse,
+            friendName: name,
+            friendEmail: email,
+            friendPhone: phone,
+            friendCourse: course,
             userName,
             userEmail,
             userPhone,
@@ -65,11 +60,11 @@ export default function ReferralModel({ setModalOpen }) {
         }
       );
       const data = await res.json();
+      
       if (res.ok) {
         alert("Referral submitted successfully!");
         setModalOpen(false);
-      }
-      else{
+      } else {
         console.log(data);
         alert("Something went wrong. Please try again later.");
       }
@@ -77,8 +72,10 @@ export default function ReferralModel({ setModalOpen }) {
       console.log(error);
       alert("Something went wrong. Please try again later.");
     }
+  
     setSubmitLoading(false);
   };
+  
   const handleNext = () => {
     if (
       !friendDetails.name ||
