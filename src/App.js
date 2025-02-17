@@ -1,23 +1,20 @@
-import logo from './logo.svg';
 import './App.css';
+import Header from "./components/Header";
+import Hero from './components/Hero';
+import HowToRefer from './components/HowToRefer';
+import Navbar from './components/Navbar';
+// import PageNav from './components/PageNav';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="font-inter">
+      <Header />
+      <Navbar />
+      {/* <PageNav/> */}
+      <div className="flex mt-4 items-center justify-center">
+        <Hero/>
+      </div>
+      <HowToRefer/>
     </div>
   );
 }
