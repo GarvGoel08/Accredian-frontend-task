@@ -57,7 +57,7 @@ export default function Navbar() {
       </div>
       {/* Mobile Menu  */}
       {isMenuOpen && (
-        <div className="fixed bg-white w-screen h-screen xl:hidden">
+        <div className="fixed bg-white w-screen h-screen xl:hidden z-50">
           <div className="fixed top-0 left-0 w-screen h-screen bg-white flex flex-col items-center p-6 z-50 shadow-lg">
             <div className="flex w-full justify-end items-center mb-6">
               <button onClick={() => setIsMenuOpen(false)}>
